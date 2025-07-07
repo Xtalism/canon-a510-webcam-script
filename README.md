@@ -1,6 +1,8 @@
 # Canon A510 Webcam on Linux using gphoto2
 
-![Canon A510](canon-a510.jpg)
+<p align="center">
+  <img src="canon-a510.jpg" alt="Canon A510" width="500"/>
+</p>
 
 This project provides a script to use a Canon PowerShot A510 camera as a webcam on Linux. It uses `gphoto2` to capture a live preview stream and `ffplay` to display it.
 
