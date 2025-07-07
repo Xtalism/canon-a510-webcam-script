@@ -2,36 +2,73 @@
 
 ![Canon A510](canon-a510.jpg)
 
-# Getting Started
-It works in any Linux distribution (I tested it out on Ubuntu and Arch Linux so far). In order for this script to work we need to install the following dependencies:
+This project provides a script to use a Canon PowerShot A510 camera as a webcam on Linux. It uses `gphoto2` to capture a live preview stream and `ffplay` to display it.
 
-- [gphoto2](http://www.gphoto.org/)
-- [libgphoto2](https://github.com/gphoto/libgphoto2?tab=readme-ov-file)
-- [ffmpeg](https://ffmpeg.org/)
+## Prerequisites
 
-You can install them with:
+Before you begin, ensure you have the following dependencies installed.
 
-```sh
-sudo apt install ffmpeg
-sudo apt install gphoto2
-sudo apt install libgphoto2-6
-sudo apt install libgphoto2-dev
+### For Debian/Ubuntu based distributions
+
+```bash
+sudo apt update
+sudo apt install gphoto2 libgphoto2-dev ffmpeg
 ```
-The camera Canon Powershot A510 is not detected as a video device on linux, not even with [gphoto2](http://www.gphoto.org/) or [webcamize](https://github.com/cowtoolz/webcamize). To list video devices:
 
-```sh
-ls /dev/video*
-```
-You should see something like this:
-```sh
-# output
-/dev/video0 
-/dev/video1
-```
-But the Canon Powershot A510 doesn't support this, so in order to capture this device in "real time" I used the following configuration I found in man gphoto2 my camera can handle:
+### For Arch Linux based distributions
 
-```sh
---capture-movie SECONDS
-    Capture a movie. If the camera supports previews, this will capture a stream of previews (motion-jpeg) as fast as the camera can.
-    If not argument is specified, it will capture preview frames until you press Ctrl-C. Arguments that can be specified are either seconds of capture or number of preview frames.
+```bash
+sudo pacman -Syu gphoto2 libgphoto2 ffmpeg
 ```
+
+## Usage
+
+1. **Connect your camera** to your computer via USB and turn it on.
+2. **Run the script**
+
+    ```bash
+    ./gphoto-preview.sh
+    ```
+
+3. A window from `ffplay` should open, displaying the live feed from your camera.
+
+### Optional: Making the script globally accessible
+
+To run `gphoto-preview.sh` from any terminal location, you can add it to your system's `PATH`.
+
+1.  **Move the script** to a common directory for user binaries:
+
+    ```bash
+    mkdir -p ~/.local/bin
+    mv gphoto-preview.sh ~/.local/bin/
+    ```
+
+2.  **Add the directory to your `PATH`**. Add the following line to your `~/.bashrc` or `~/.zshrc` file:
+
+    ```bash
+    export PATH="$HOME/.local/bin:$PATH"
+    ```
+
+3.  **Apply the changes** by restarting your terminal or running `source ~/.bashrc` or `source ~/.zshrc`.
+
+## How It Works
+
+The Canon PowerShot A510, like many older digital cameras, is not recognized as a standard video device (`/dev/video*`) on Linux. This means it cannot be used directly by most applications that expect a webcam.
+
+This script circumvents this limitation by using the `--capture-movie` feature of `gphoto2`. This command captures a continuous stream of preview frames from the camera as a motion JPEG (`.mjpg`) file. The script then uses `ffplay` (part of the FFmpeg suite) to play this file in real-time, effectively turning your camera into a live preview monitor.
+
+## Troubleshooting
+
+- **Camera not detected**
+  Ensure the camera is properly connected and powered on. You can check if `gphoto2` detects it by running:
+
+  ```bash
+  gphoto2 --auto-detect
+  ```
+
+- **Script errors**
+  Make sure all dependencies are installed correctly and that the `gphoto-preview.sh` script has execute permissions (`chmod +x gphoto-preview.sh`).
+
+## License
+
+This project is licensed under the terms of the LICENSE file.
