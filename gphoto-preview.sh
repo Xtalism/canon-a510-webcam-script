@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OUTPUT_DIR="/home/xtal/.gphoto-output"
+OUTPUT_DIR="$HOME/.gphoto-output"
 MOVIE_FILE="$OUTPUT_DIR/movie.mjpg"
 
 mkdir -p "$OUTPUT_DIR"
